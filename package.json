@@ -5,9 +5,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate-start-pages": "node build-tools/generate-start-pages",
-    "copy-resources": "copyfiles \"resources/**/*\" output",
-    "build": "npm run generate-start-pages && npm run copy-resources"
+    "clean": "rimraf outputs/",
+    "build": "npm run clean && node ./build-tools/transpile-resources"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +19,7 @@
     "copyfiles": "2.1.0",
     "less": "3.8.1",
     "mkdirp": "0.5.1",
+    "rimraf": "2.6.2",
     "walk": "2.3.14"
   }
 }

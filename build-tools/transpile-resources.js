@@ -16,7 +16,6 @@ const rules = [
     name: 'less',
     test: /\.less$/,
     transpile: (inputPath, outputDir, root) => {
-      console.log('XXXXX', inputPath, root, outputDir)
       return fs.promises.readFile(path.join(root, inputPath))
         .then(contents => less.render(contents.toString('utf-8')))
         .then(output => {
@@ -29,7 +28,7 @@ const rules = [
   }
 ]
 
-const inputDir = './resources'
+const inputDir = './src/'
 const outputDir = './output/'
 
 function main () {
@@ -63,7 +62,6 @@ function processInputFile (root, stats) {
   }
   const dir = path.relative(inputDir, root)
   const relPath = path.join(dir, stats.name)
-  console.log('YYYY', relPath)
   return Promise.map(
     rules.filter(rule => rule.test.test(relPath, stats)),
     rule => Promise.method(rule.transpile)(relPath, outputDir, inputDir)
