@@ -5,18 +5,21 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "generate-start-pages": "node build-tools/generate-start-pages",
+    "copy-resources": "copyfiles \"resources/**/*\" output",
+    "build": "npm run generate-start-pages && npm run copy-resources"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "html-creator": "0.4.3",
     "html-escaper": "1.0.1",
-    "text-scribe": "1.1.1",
-    "xmlbuilder": "10.1.1"
+    "text-scribe": "1.1.1"
   },
   "devDependencies": {
-    "webpack": "4.24.0",
-    "webpack-cli": "^3.1.2"
+    "bluebird": "3.5.2",
+    "copyfiles": "2.1.0",
+    "less": "3.8.1",
+    "mkdirp": "0.5.1",
+    "walk": "2.3.14"
   }
 }

@@ -1,7 +1,9 @@
-const html = new HtmlBuilder()
+const StartPage = require('../lib/start-page')
+
+const html = new StartPage()
 const {
   h1, h2, section, table, tr, td, th, link, img, ul, li
-} = HtmlBuilder.nodes
+} = StartPage.nodes
 
 const gitlabBaseUrl = 'https://git.nexus.commercehub.com'
 const gitlabFaviconUrl = `${gitlabBaseUrl}/favicon.ico`
@@ -109,5 +111,4 @@ html.body(
 )
 
 const htmlString = html.render().toString()
-// console.log(htmlString)
-document.write(htmlString)
+console.log(htmlString)
