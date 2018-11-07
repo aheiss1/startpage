@@ -1,4 +1,5 @@
 const StartPage = require('../lib/start-page')
+const URL = require('url')
 
 const html = new StartPage()
 const {
@@ -28,6 +29,18 @@ const devOpsTools = [
   {
     name: 'Pagerduty',
     url: 'https://commercehub.pagerduty.com'
+  },
+  {
+    name: 'Uchiwa',
+    logoUrl: '/bower_components/uchiwa-web/favicon.ico',
+    envs: {
+      nonprod: {
+        url: 'http://sensu.nexus.commercehub.com'
+      },
+      prod: {
+        url: 'http://sensuprod.commercehub.com'
+      }
+    }
   }
 ]
 
@@ -64,17 +77,42 @@ const boarApps = [
   }
 ]
 
+html.head(
+  ['link', { rel: 'stylesheet', href: 'resources/style/index.css' }]
+)
 html.body(
   h1('My Start Page'),
   section(
     h2('Devops Tools'),
-    ul({ id: 'devopsTools' }, ul => ul.mapToItems(devOpsTools, (tool, li) => {
-      const toolUrl = tool.url || `https://${tool.name}.commercehub.com`
-      const toolLogoUrl = tool.logoUrl || `${toolUrl}/favicon.ico`
-      li.link(toolUrl, { title: tool.name }, img({
-        src: toolLogoUrl, width: 24, height: 24, alt: `${tool.name} logo`
-      }))
-    }))
+    table({ id: 'devOpsTools', border: 1, cellPadding: '5px' }, table => {
+      const envs = [...new Set(
+        devOpsTools
+          .map(tool => tool.envs)
+          .filter(Boolean)
+          .map(envs => Object.keys(envs))
+          .reduce((a, n) => [...a, ...n], [])
+      )]
+      table.tr(td.empty(), tr => tr.mapToHeadings(envs, e => e))
+      table.mapToRows(devOpsTools, (tool, row) => {
+        const commonUrl = tool.url || ''
+        const commonLogoUrl = tool.logoUrl || URL.resolve(commonUrl, '/favicon.ico')
+        row.th(tool.name)
+        if (tool.envs) {
+          row.mapToCells(envs, (env, cell) => {
+            const toolEnv = (tool.envs || {})[env] || {}
+            const url = URL.resolve(toolEnv.url || '', commonUrl)
+            const logoUrl = URL.resolve(url, URL.resolve(toolEnv.logoUrl || '', commonLogoUrl))
+            cell.link(url, { title: tool.name }, img({
+              src: logoUrl, width: 24, height: 24, alt: `${tool.name} logo`
+            }))
+          })
+        } else {
+          row.td({ colspan: envs.length }, link(commonUrl, { title: tool.name }, img({
+            src: commonLogoUrl, width: 24, height: 24, alt: `${tool.name} logo`
+          })))
+        }
+      })
+    })
   ),
   section(
     h2('BOAR'),
