@@ -1,8 +1,36 @@
-table#devOpsTools {
+section {
+  display: inline-block;
+  border: 1px solid #eee;
+  margin: 5px;
+  padding: 10px 35px;
+
+  h2 {
+    text-align: center;
+    text-decoration: underline;
+  }
+}
+table {
   tr {
-    td, th {
-      text-align: center
+    td {
+      text-align: center;
+      border: 1px solid #ccc;
+      padding: 5px;
+      vertical-align: middle;
     }
+
+    &:first-child th {
+      border-bottom: 1px solid #999;
+
+      &:empty {
+        border: none;
+      }
+    }
+  }
+}
+
+#devOpsTools {
+  col.-by-env {
+    width: 9em;
   }
 }
 

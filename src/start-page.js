@@ -81,10 +81,25 @@ html.head(
   ['link', { rel: 'stylesheet', href: 'resources/style/index.css' }]
 )
 html.body(
-  h1('My Start Page'),
+  section(
+    h2('Always On'),
+    ul(
+      li(link('https://inbox.google.com/u/0/', 'Google Inbox')),
+      li(link('https://calendar.google.com/calendar/r', 'Google Calendar')),
+      li(link('https://getpocket.com/a/queue/', 'pocket')),
+      li(link('https://jira.nexus.commercehub.com/secure/Dashboard.jspa', 'Jira'))
+    )
+  ),
+  section(
+    h2('Mito'),
+    ul(
+      li(link('https://hubbub.nexus.commercehub.com/display/PLAT/Mito+Weekly+Notes', 'Weekly Meeting Notes')),
+      li(link('https://hubbub.nexus.commercehub.com/display/PLAT/On-Call+Playbook', 'On-Call Playbook'))
+    )
+  ),
   section(
     h2('Devops Tools'),
-    table({ id: 'devOpsTools', border: 1, cellPadding: '5px' }, table => {
+    table({ id: 'devOpsTools', cellPadding: '5px' }, table => {
       const envs = [...new Set(
         devOpsTools
           .map(tool => tool.envs)
@@ -92,7 +107,9 @@ html.body(
           .map(envs => Object.keys(envs))
           .reduce((a, n) => [...a, ...n], [])
       )]
-      table.tr(td.empty(), tr => tr.mapToHeadings(envs, e => e))
+      table.apply(['col'])
+      envs.forEach(env => table.apply(['col', { class: `-by-env env-${env}` }]))
+      table.tr(th(), tr => tr.mapToHeadings(envs, e => e))
       table.mapToRows(devOpsTools, (tool, row) => {
         const commonUrl = tool.url || ''
         const commonLogoUrl = tool.logoUrl || URL.resolve(commonUrl, '/favicon.ico')
@@ -116,10 +133,15 @@ html.body(
   ),
   section(
     h2('BOAR'),
+    ul(
+      li(link('https://hubbub.nexus.commercehub.com/display/SRE/BOAR+Playbook', 'BOAR Playbook')),
+      li(link('https://hubbub.nexus.commercehub.com/display/SRE/BOAR+Runbook', 'BOAR Runbook')),
+      li(link('https://hubbub.nexus.commercehub.com/display/SRE/BOAR%3A+Training+and+Reference+Materials', 'Training & Reference Material')),
+      li(link('https://hubbub.nexus.commercehub.com/display/SRE/BOAR+Components', 'Components list'))
+    ),
     table(
-      { border: 1, cellPadding: '5px' },
       tr(
-        th.empty(),
+        th(),
         th({ colspan: 2 }, link(gitlabBaseUrl, gitlabFaviconImg, { title: 'Gitlab' })),
         row => row.mapToHeadings(boarEnvs, env => env.name)
       ),
